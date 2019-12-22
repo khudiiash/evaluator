@@ -36,7 +36,7 @@ input::placeholder {
     background: rgb(46, 46, 46);
     margin: 50px 50px;
     height: auto;
-    max-height: 500px;
+    max-height: 700px;
     width: 600px;
     display: flex;
     flex-direction: column;
@@ -65,7 +65,14 @@ label {
 }
 label.active {
     background: rgb(85, 85, 85) !important;
-    border: 1px solid white !important;
+    border: 1px solid rgb(202, 202, 202) !important;
+}
+label.evaluator.active .evaluator-ava {
+    transform: scale(1.05);
+}
+label.evaluator.active .evaluator-name {
+    color: rgb(255, 255, 255);
+    transform: translateX(3px)
 }
 span {
     font-family: "Roboto";
@@ -105,14 +112,25 @@ span.label:hover:after {
 .btn-success.alex{
     width: 400px !important;
     margin: 10px !important;
-    background: rgb(181,148,164) !important;
+    background: rgb(209, 152, 179) !important;
 }
 .btn-success.dima{
     width: 400px !important;
     margin: 10px !important;
     background: rgb(40,167,69) !important;
 }
-.btn-success.alex, .btn-success.dima{
+.btn-success.masha{
+    width: 400px !important;
+    margin: 10px !important;
+    background: rgb(228, 84, 173) !important;
+}
+.btn-success.oksana{
+    width: 400px !important;
+    margin: 10px !important;
+    background: #E3CF12 !important;
+    color: #2d2d2d
+}
+.btn-success.alex, .btn-success.dima ,.btn-success.masha,.btn-success.oksana{
      outline: none !important;
     border: none !important;
     box-shadow: none !important;
@@ -131,12 +149,13 @@ span.label:hover:after {
     width: 100%;
     min-height: 400px;
 }
-ul {
+ul, ol {
     list-style-type: none;
 }
-li.hyphened:before {
-    content: "- ";
-  }
+
+ol, li {
+    list-style-type: none;
+}
 .heading {
     color: rgb(194, 194, 194);
     font-size: 15px;
@@ -162,8 +181,10 @@ h3 {
 .evaluator {
     height: 60px;
     width: 120px !important;
-    background: rgb(80, 80, 80);
     position: relative;
+}
+.evaluator:hover {
+    background: rgb(73, 73, 73) !important;
 }
 .evaluator-info {
     display: flex;
@@ -171,17 +192,32 @@ h3 {
 }
 .evaluator-name {
     color: rgb(182, 182, 182);
-    height: 100%;
+    /* height: 100%; */
     line-height: 80px;
     vertical-align: bottom;
-    font-size: 14px;
+    font-size: 13px;
     text-indent: 10px;
+    width: 35px;
 }
 .evaluator-ava {
     height: 50px;
     width: 50px;
     border-radius: 50%;
     background-size: cover;
+    transition: transform 100ms ease-in;
+}
+.evaluator-name {
+    transition: all 100ms ease-in;
+}
+.evaluator:hover {
+    background: rgb(54, 54, 54);
+}
+.evaluator:hover .evaluator-ava {
+    transform: scale(1.05);
+}
+.evaluator:hover .evaluator-name {
+    color: rgb(235, 235, 235);
+    transform: translateX(3px);
 }
 .showIssues {
     margin-top: 2em;
@@ -202,7 +238,6 @@ h3 {
     left: -2000px;
     transition: left 1s;
     bottom: 15px;
-    margin-top: -33px;
 }
 .showIssues::before {
     content: 'Issues: ';
@@ -223,10 +258,10 @@ h3 {
     color: white;
     border-radius: 5px;
     width: fit-content;
-    padding: 3px;
+    padding: 1px;
     font-weight: 200;
-    margin: 0 3px;
-    height: 30px;
+    margin: 5px 5px;
+    height: 25px;
     cursor: pointer;
 }
 .issue:hover {

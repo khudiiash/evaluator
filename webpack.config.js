@@ -1,6 +1,5 @@
 // Imports: Dependencies
 const path = require('path');
-require("babel-register");
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 // Webpack Configuration
 const config = {

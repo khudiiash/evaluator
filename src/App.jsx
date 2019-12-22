@@ -4,6 +4,8 @@ import { getMonth } from "./modules";
 import { templates, commTemplates } from "./templates";
 import dimaAva from './img/dima.jpg'
 import alexAva from './img/alex.jpg'
+import mashaAva from './img/masha.jpg'
+import oksanaAva from './img/oksana.jpg'
 
 const Type = props => {
   let id = "option" + props.type;
@@ -62,14 +64,14 @@ const GoalsList = props => {
     ? <ol>
         {props.goals
           ? props.goals.map(function(name, index) {
-              return <li key={index}>{name}</li>;
+          return <li key={index}>{index+1}{'. '}{name}</li>;
             })
           : ""}{" "}
       </ol>
     : <ul>
         {props.goals
           ? props.goals.map(function(name, index) {
-              return <li key={index} className='hyphened'>{name}</li>;
+          return <li key={index}>{'- '}{name}</li>;
             })
           : ""}{" "}
       </ul>
@@ -110,9 +112,12 @@ class App extends Component {
     // Evaluators 
     this.setDima = this.setDima.bind(this);
     this.setAlex = this.setAlex.bind(this);
+    this.setOksana = this.setOksana.bind(this);
+    this.setMasha = this.setMasha.bind(this);
     
     // Inputs
     this.setOrders = this.setOrders.bind(this);
+    this.setBalance = this.setBalance.bind(this);
     this.setLevel = this.setLevel.bind(this);
     this.setIssues = this.setIssues.bind(this);
     this.setCommIssues = this.setCommIssues.bind(this);
@@ -143,6 +148,7 @@ class App extends Component {
       showCommIssues: "-2000px",
       type: "regular",
       orders: "",
+      balance: 0,
       level: "",
       issues: "",
       commIssues: '',
@@ -157,7 +163,9 @@ class App extends Component {
   }
   
   showIssues() {
-    this.setState({showIssues: '0',showCommIssues: '-2000px'})
+    $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+    this.setState({showIssues: '0',showCommIssues: '-1000px'})
+    
   }
   showCommIssues() {
     this.setState({showIssues: '-2000px',showCommIssues: '0'})
@@ -171,7 +179,6 @@ class App extends Component {
     }
     e.target.style.backgroundColor = this.state.evaluatorColor
    
-    console.log(issues)
     this.setState({issues:issues})
    
   }
@@ -193,8 +200,21 @@ class App extends Component {
 
     });
   }
+  setOksana() {
+    this.setState({
+      evaluator: 'Oksana',
+      evaluatorColor: '#E3CF12'
+
+    });
+  }
+  setMasha() {
+    this.setState({
+      evaluator: 'Masha',
+      evaluatorColor: 'rgb(228, 84, 173)'
+
+    });
+  }
   setAlex() {
-    console.log('to Alex')
     this.setState({
       evaluator: 'Alex',
       evaluatorColor: 'rgb(181,148,164)'
@@ -222,6 +242,9 @@ class App extends Component {
       listStyle: "hyphens"
     });
   }
+  setBalance(e){
+    this.setState({balance:e.target.value})
+  }
   handleSubmit(e) {
     e.preventDefault();
     let evaluator = this.state.evaluator,
@@ -235,7 +258,8 @@ class App extends Component {
         stateCommIssues = this.state.commIssues,
         type = this.state.type,
         goals = [],
-        communication = []
+        communication = [],
+        balance = this.state.balance
 
     stateIssues = stateIssues.includes(',') ? stateIssues.split(',').map(m => m.trim()) : [stateIssues.trim()]
 
@@ -255,7 +279,6 @@ class App extends Component {
       })
     }
     stateCommIssues = stateCommIssues.includes(',') ? stateCommIssues.split(',').map(m => m.trim()) : [stateCommIssues.trim()]
-    console.log(stateCommIssues)
     
     if (!(stateCommIssues.length === 1 && !stateCommIssues[0].length)) {
       stateCommIssues.map(k => {
@@ -272,11 +295,7 @@ class App extends Component {
         }
       })
     }
-    console.log(communication)
-    // commKeys.map(k => {
-    //   if (this.state.commIssues.includes(k))
-    //     communication.push(Object.values(commTemplates.find(o => o[k]))[0]);
-    // });
+   
     let base,lowRating,regular,mistakes,ending;
     if (stateIssues.length > 1) {
       stateIssues[stateIssues.length-1] =  `and ${stateIssues[stateIssues.length-1]}`
@@ -285,20 +304,20 @@ class App extends Component {
         base = `Dear writer, I am ready to present your ${getMonth()} Quality Report! `;
         let theLevel = `Your ${ordersN > 1 ? `average ` : ''}quality mark ${ordersN > 1 ? `for these orders is ${level}`: `for the order is ${level}` }. `
     
-        lowRating = `For the purposes of quality improvement, I have checked ${ordersN} ${
+        lowRating = `For the purposes of quality improvement, I have checked ${ordersN-balance} ${
           ordersN > 1 ? "orders" : "order"
-        } that received poor rating last month. ${level ? theLevel : ''}Having reviewed ${
+        } that received poor rating last month${balance > 0 ? ` and ${balance} orders for balance because some of the orders were finished before the previous check`: ''}. ${level ? theLevel : ''}Having reviewed ${
           ordersN > 1 ? "these orders" : "this order"
-        }, I came to the conclusion that customer's assessment of your work is ${
+        }, I came to the conclusion that ${ordersN > 1 ? "customers'":"the customer's" } assessment of your work is ${
           this.state.rating
         }. 
         ${isFair ? "Indeed" : "However"}, you have made ${
           isFair ? "many significant" : "a few "
         } mistakes to consider. `;
     
-        regular = `This is your regular quality report for which I have checked ${ordersN} ${
+        regular = `This is your regular quality report for which I have checked ${ordersN-balance} ${
           ordersN > 1 ? "orders" : "order"
-        } finished last month. ${level ? theLevel : ''}Having reviewed ${
+        } finished last month${balance > 0 ? ` and ${balance} orders for balance because some of the orders were finished before the previous check`: ''}. ${level ? theLevel : ''}Having reviewed ${
           ordersN > 1 ? "these orders" : "this order"
         }, I came to the conclusion that customer's assessment of your work is ${
           this.state.rating
@@ -321,14 +340,35 @@ class App extends Component {
           this.setState({ comment: base + lowRating + mistakes + ending });
         }
     } else if (evaluator === 'Alex') {
-      let low = `Dear writer! I am glad to inform you that I have finished checking your papers for this ${getMonth()} Quality Report. I have reviewed and evaluated the orders with the low rating that were finished in November. Pay attention that these reports are of critical importance to your performance as they may help you to learn new rules and find out about your mistakes. In summary, your most significant problems are ${stateIssues.length > 1 ? stateIssues.join(', ') : stateIssues}. The results, as well as my comments and suggestions, you can check in the attached file. Go through the report and analyze your mistakes. Do not hesitate to contact me in case of any questions or comments!`
-      let regular = `Hello, dear writer! I would like to inform you that I have completed and uploaded the ${getMonth()} Quality Report for you! In summary, I have mentioned several weak points, which are ${stateIssues.length > 1 ? stateIssues.join(', ') : stateIssues}.  Pay attention that these reports are of critical importance for your performance, as they may help you to learn new rules and find out about your mistakes. Work on these issues to ensure that you provide qualified and professional help to our customers. Check the attached file, review all my comments, suggestions, and helpful links. Do not hesitate to ask me in case of any further questions or comments!`
+      let low = `Dear writer! I am glad to inform you that I have finished checking your papers for this ${getMonth()} Quality Report. I have reviewed and evaluated ${ordersN-balance} ${
+        ordersN > 1 ? "orders with poor ratings" : "order with a poor rating"
+      } finished last month${balance > 0 ? ` and ${balance} orders for balance because some of the orders were finished before the previous check`: ''}. Pay attention that these reports are of critical importance to your performance as they may help you to learn new rules and find out about your mistakes. In summary, your most significant problems are ${stateIssues.length > 1 ? stateIssues.join(', ') : stateIssues}. The results, as well as my comments and suggestions, you can check in the attached file. Go through the report and analyze your mistakes. Do not hesitate to contact me in case of any questions or comments!`
+      let regular = `Hello, dear writer! I would like to inform you that I have completed and uploaded the ${getMonth()} Quality Report for you! In summary, I have mentioned several weak points, which are ${stateIssues.length > 1 ? stateIssues.join(', ') : stateIssues}. Pay attention that these reports are of critical importance for your performance, as they may help you to learn new rules and find out about your mistakes. Work on these issues to ensure that you provide qualified and professional help to our customers. Check the attached file, review all my comments, suggestions, and helpful links. Do not hesitate to ask me in case of any further questions or comments!`
 
       if (type === "regular") {
         this.setState({ comment: regular});
       } else {
         this.setState({ comment: low });
       }
+    } else if (evaluator === 'Masha') {
+      let lowFair = `Dear writer! We continue checking our writers' performance to help them eliminate issues in writing. Read each report attentively and work on the highlighted mistakes${isGood ? '': ' to avoid fines, suspension, and a possible dismissal'}. 
+      This month, your evaluation is based on ${ordersN > 1 ? `${ordersN-balance} low-rated orders${balance > 0 ? ` and ${balance} orders for balance because some of the orders were finished before the previous check`: ''}` : 'one low-rated order'}. After finishing the evaluation, I concluded that the rating was fair. The paper has various mistakes that should be avoided in your writing. ${stateIssues.length > 1 ? 'They include' : 'The major issue is'} ${stateIssues.length > 1 ? stateIssues.join(', ') : stateIssues}. Please read this report for more details, write down your most common mistakes, and try to avoid them in your other papers. Do not forget to check the links to useful sources. 
+      We hope to see your progress next month. If you have any questions regarding the evaluation, please ask.
+      `
+      let lowUnfair = `Dear writer! We continue checking our writers' performance to help them eliminate issues in writing. Read each report attentively and work on the highlighted mistakes ${isGood ? '': 'to avoid fines, suspension, and a possible dismissal'}. 
+      For this evaluation, we have found another order with low rating. After finishing the evaluation, I concluded that the rating was not fair. However, the paper still has a few mistakes that should be avoided in writing. ${stateIssues.length > 1 ? 'These mistakes include':'The major issue is'} ${stateIssues.length > 1 ? stateIssues.join(', ') : stateIssues}. Please read this report for more details. Do not forget to check the links to useful sources. If you have any questions regarding the evaluation, please ask.
+      `
+      let regular = `Dear writer! We continue checking our writers' performance to help them eliminate issues in writing. This month, I evaluated ${ordersN-balance} of your orders${balance > 0 ?` and ${balance} orders for balance because some of the orders were finished before the previous check`:''}. Based on the evaluation, your average level and grade is ${level}. The evaluation shows that there are issues that should be fixed in your future papers. ${stateIssues.length > 1 ? 'Among the major issues are' : 'The major issue is'} ${stateIssues.length > 1 ? stateIssues.join(', ') : stateIssues}. Please look through the attached file with the evaluated orders for more details. I included comments and feedback highlighting your mistakes. There are also links to useful sources.
+      Work on the highlighted mistakes${isGood ? '': ' to avoid fines, suspension, and a possible dismissal'}. We hope to see your progress in writing. If you have any questions regarding the evaluation, please ask.
+      `
+      if (type === "regular" ) {
+        this.setState({ comment: regular});
+      } else {
+        isFair
+        ? this.setState({ comment: lowFair })
+        : this.setState({ comment: lowUnfair})
+      }
+
     }
     
 
@@ -387,6 +427,9 @@ class App extends Component {
           >
             <Evaluator name="Dima" ava={dimaAva} onClick={this.setDima} checked={true} />
             <Evaluator name="Alex" ava={alexAva} onClick={this.setAlex} checked={false} />
+            <Evaluator name="Oksana" ava={oksanaAva} onClick={this.setOksana} checked={false} />
+            <Evaluator name="Masha" ava={mashaAva} onClick={this.setMasha} checked={false} />
+
   
            
           </div>
@@ -415,6 +458,7 @@ class App extends Component {
           >
             <Type type="Fair" onClick={this.setFair} checked={true} />
             <Type type="Unfair" onClick={this.setUnfair} checked={false} />
+
           </div>
           <div className="main">
             <Input
@@ -424,6 +468,13 @@ class App extends Component {
               onChange={this.setOrders}
               issues={false}
               
+            />
+            <Input
+              label="Balance"
+              type='orders'
+              placeholder="How many balance orders?"
+              onChange={this.setBalance}
+              issues={false}
             />
             <Input
               label="Level"
@@ -499,18 +550,18 @@ class App extends Component {
 
         </div>
         </div>
-        <div className="showIssues" style={{left:showIssues}}>
-          {tempKeys 
-          ? tempKeys.map(function(name, index) {
-            return <span onClick={appendIssues} className='issue' key={index} issue={name}>{name}</span>;
-          })
-          : ''
-        }
-        </div>
         <div className="showCommIssues" style={{left:showCommIssues}}>
           {commKeys 
           ? commKeys.map(function(name, index) {
             return <span onClick={appendCommIssues} className='issue' issue={name} key={index}>{name}</span>;
+          })
+          : ''
+        }
+        </div>
+        <div className="showIssues" style={{left:showIssues}}>
+          {tempKeys 
+          ? tempKeys.map(function(name, index) {
+            return <span onClick={appendIssues} className='issue' key={index} issue={name}>{name}</span>;
           })
           : ''
         }
