@@ -12,8 +12,10 @@ export let templates = [
     {'misused semicolon':`Learn how and when you could use semicolon`},
     {'weak words':`Do not use weak words: Replace them with more specific synonyms.`},
     {'incorrect references formatting':`Fix references formatting.`},
+    {'copying':'Do not copy text fragments within your paper. Such writing will result in severe fines and suspensions. '},
+    {'indirect language':'Do not use idioms, metaphors, and colloquial phrases'},
     {'incorrect citations formatting':`Correct citations formatting.`},
-    {'inappropriate conclusion':`Work on conclusion paragraphs: they must summarize the key points of the essay and restate the thesis.`},
+    {'inappropriate conclusion':`Work on concluding paragraphs: they must summarize the key points of the essay and restate the thesis.`},
     {'absent conclusion':`Include concluding paragraphs to your essays: they must summarize the key points of the essay and restate the thesis.`},
     {'plagiarism':`Do not allow plagiarism in your works; use available plagiarism-checkers.`},
     {'filler sentences':'Exclude filler sentences that only rephrase that already mentioned information or provide off-topic ideas.'},
@@ -28,5 +30,6 @@ export let commTemplates = [
     {'commas':'You should use commas in your messages correctly as some messages lose their meaning without appropriate punctuation. '},
     {'spelling':'Be more careful when composing messages as they include many spelling mistakes. '},
     {'one-word replies':'Please, replay to customers with complete sentences to avoid vagueness and ambiguity. '},
-    {'rude':'You often leave rude comments when customers negatively assess your work. I recommend you accept criticism to improve your writing and communicate as a professional: it will help you retain customers. '}
+    {'rude':'You often leave rude comments when customers negatively assess your work. I recommend you accept criticism to improve your writing and communicate as a professional: it will help you retain customers. '},
+	{'how to avoid revisions':`You could have avoided revisions if you asked the customer to specify the instructions before start working on the order. Discovering additional customer's preferences help you understand his or her expectations more accurately. Also, your interest would positively influence your rating. `}
 ]

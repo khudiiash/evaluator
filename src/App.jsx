@@ -301,13 +301,13 @@ class App extends Component {
       stateIssues[stateIssues.length-1] =  `and ${stateIssues[stateIssues.length-1]}`
     }
     if (evaluator === 'Dima') {
+
         base = `Dear writer, I am ready to present your ${getMonth()} Quality Report! `;
         let theLevel = `Your ${ordersN > 1 ? `average ` : ''}quality mark ${ordersN > 1 ? `for these orders is ${level}`: `for the order is ${level}` }. `
     
         lowRating = `For the purposes of quality improvement, I have checked ${ordersN-balance} ${
-          ordersN > 1 ? "orders" : "order"
-        } that received poor rating last month${balance > 0 ? ` and ${balance} orders for balance because some of the orders were finished before the previous check`: ''}. ${level ? theLevel : ''}Having reviewed ${
-          ordersN > 1 ? "these orders" : "this order"
+          ordersN-balance > 1 ? "orders" : "order"} that received a poor rating last month${balance > 0 ? ` and ${balance} ${balance > 1? 'orders':'order'} for balance because ${ordersN-balance > 1 ? 'some of the orders were':'the low-rated order was'} finished before the previous check`: ''}. ${level ? theLevel : ''}Having reviewed ${
+          ordersN > 1 ? "them" : "it"
         }, I came to the conclusion that ${ordersN > 1 ? "customers'":"the customer's" } assessment of your work is ${
           this.state.rating
         }. 
@@ -316,28 +316,22 @@ class App extends Component {
         } mistakes to consider. `;
     
         regular = `This is your regular quality report for which I have checked ${ordersN-balance} ${
-          ordersN > 1 ? "orders" : "order"
-        } finished last month${balance > 0 ? ` and ${balance} orders for balance because some of the orders were finished before the previous check`: ''}. ${level ? theLevel : ''}Having reviewed ${
-          ordersN > 1 ? "these orders" : "this order"
-        }, I came to the conclusion that customer's assessment of your work is ${
-          this.state.rating
-        }. ${isFair ? "Indeed" : "However"}, you have made ${
-          isFair ? "many significant" : "a few "
-        } issues to consider. `;
-    
-        mistakes = `The most notable areas of concern in your ${
+          ordersN-balance > 1 ? "orders" : "order"
+        } finished last month${balance > 0 ? ` and ${balance} ${balance > 1 ? 'orders': 'order'} for balance because ${ordersN-balance > 1 ? 'some of the orders were':'the order was'} finished before the previous check`: ''}. ${level ? theLevel : ''}Having reviewed ${
+          ordersN > 1 ? "them" : "it"
+        }, I found ${isGood ? 'a few insignificant issues to discuss.' : 'a lot of significant issues to discuss.'} The most notable areas of concern in your ${
           ordersN > 1 ? "essays" : "essay"
-        } include ${stateIssues.length > 1 ? stateIssues.join(', ') : stateIssues}. `;
+        } include ${stateIssues.length > 1 ? stateIssues.join(', ') : stateIssues}. `
         ending = `${
           isGood
             ? `Therefore, your work does not cause significant concern, but I still recommend you to get acquainted with the apparent issues. `
             : `I recommend you to pay close attention to the report and work on the highlighted areas. Otherwise, you may face fines and suspensions. `
         }See the attached document for details and supporting materials.`;
-
+        console.log(mistakes)
         if (type === "regular") {
-          this.setState({ comment: base + regular + mistakes + ending });
+          this.setState({ comment: base + regular + ending });
         } else {
-          this.setState({ comment: base + lowRating + mistakes + ending });
+          this.setState({ comment: base + lowRating + ending });
         }
     } else if (evaluator === 'Alex') {
       let low = `Dear writer! I am glad to inform you that I have finished checking your papers for this ${getMonth()} Quality Report. I have reviewed and evaluated ${ordersN-balance} ${
